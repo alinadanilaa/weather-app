@@ -2,7 +2,6 @@ import React from 'react'
 import { iconUrlFromCode } from '../services/weatherService';
 
 function Forecast({ title, items }) {
-    console.log(items)
     return (
         <div>
             <div className='flec items-center justify-center mt-6'>

@@ -26,14 +26,21 @@ function App() {
   }, [query, units])
 
 
+  const formatBackground = () => {
+    if (!weather) return ' from-pink-200 to-purple-400';
+    const treshold = units == 'metric' ? 20 : 60;
+    if (weather.temp >= treshold) return ' from-pink-200 to-purple-400';
+
+    return ' from-blue-300 to-purple-400';
+  }
 
 
   return (
-    <div className="mx-auto max-w-screen-md mt-4 py-5 px-32
-    bg-gradient-to-tr from-pink-200 to-purple-400 
-    h-fit shadow-xl shadow-gray-400">
-      <TopButtons />
-      <Inputs />
+    <div className={`mx-auto max-w-screen-md mt-4 py-5 px-32
+    bg-gradient-to-tr    h-fit shadow-xl shadow-gray-400
+       ${formatBackground()}`}>
+      <TopButtons setQuery={setQuery} />
+      <Inputs setQuery={setQuery} units={units} setUnits={setUnits} />
 
 
       {weather && (
