@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import UilReact from '@iconscout/react-unicons/icons/uil-react';
 import TopButtons from './components/TopButtons';
@@ -9,14 +9,24 @@ import Forecast from './components/Forecast.jsx';
 import getFormattedWeatherData from './services/weatherService';
 
 
-
 function App() {
 
-  const fetchWeather = async () => {
-    const data = await getFormattedWeatherData({ q: 'iasi' });
-    console.log(data);
-  };
-  fetchWeather();
+  const [query, setQuery] = useState({ q: 'Bucharest' });
+  const [units, setUnits] = useState('metric');
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      await getFormattedWeatherData({ ...query, units }).then(
+        (data) => {
+          setWeather(data)
+        });
+    };
+    fetchWeather();
+  }, [query, units])
+
+
+
 
   return (
     <div className="mx-auto max-w-screen-md mt-4 py-5 px-32
@@ -25,10 +35,17 @@ function App() {
       <TopButtons />
       <Inputs />
 
-      <TimeAndLocation />
-      <TemperatureAndDetails />
-      <Forecast title='hourly forecast' />
-      <Forecast title='Daily forecast' />
+
+      {weather && (
+        <div>
+          <TimeAndLocation weather={weather} />
+          <TemperatureAndDetails weather={weather} />
+
+          <Forecast title="hourly forecast" items={weather.hourly} />
+          <Forecast title="daily forecast" items={weather.daily} />
+        </div>
+      )}
+
     </div>
   );
 }

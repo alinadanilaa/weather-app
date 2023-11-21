@@ -1,6 +1,8 @@
 import React from 'react'
+import { iconUrlFromCode } from '../services/weatherService';
 
-function Forecast({ title }) {
+function Forecast({ title, items }) {
+    console.log(items)
     return (
         <div>
             <div className='flec items-center justify-center mt-6'>
@@ -10,80 +12,25 @@ function Forecast({ title }) {
             </div>
             <hr className='my-2' />
             <div className=' flex flex-row items-center justify-between'>
-                <div className=' bg-white bg-opacity-30 rounded-lg flex flex-col items-center justify-center'>
-                    <p className='font-light text-sm'>
-                        4:30 PM
-                    </p>
-                    <img src="./cloudy-night.png"
-                        alt=""
-                        className='w-12 my-1'
-                    />
-                    <p className='font-medium'>
-                        22°
-                    </p>
-                </div>
-                <div className=' bg-white bg-opacity-30 rounded-lg flex flex-col items-center justify-center'>
-                    <p className='font-light text-sm'>
-                        4:30 PM
-                    </p>
-                    <img src="./cloudy-night.png"
-                        alt=""
-                        className='w-12 my-1'
-                    />
-                    <p className='font-medium'>
-                        22°
-                    </p>
-                </div>
-                <div className=' bg-white bg-opacity-30 rounded-lg flex flex-col items-center justify-center'>
-                    <p className='font-light text-sm'>
-                        4:30 PM
-                    </p>
-                    <img src="./cloudy-night.png"
-                        alt=""
-                        className='w-12 my-1'
-                    />
-                    <p className='font-medium'>
-                        22°
-                    </p>
-                </div>
-                <div className=' bg-white bg-opacity-30 rounded-lg flex flex-col items-center justify-center'>
-                    <p className='font-light text-sm'>
-                        4:30 PM
-                    </p>
-                    <img src="./cloudy-night.png"
-                        alt=""
-                        className='w-12 my-1'
-                    />
-                    <p className='font-medium'>
-                        22°
-                    </p>
-                </div>
-                <div className=' bg-white bg-opacity-30 rounded-lg flex flex-col items-center justify-center'>
-                    <p className='font-light text-sm'>
-                        4:30 PM
-                    </p>
-                    <img src="./cloudy-night.png"
-                        alt=""
-                        className='w-12 my-1'
-                    />
-                    <p className='font-medium'>
-                        22°
-                    </p>
-                </div>
-                <div className=' bg-white bg-opacity-30 rounded-lg flex flex-col items-center justify-center'>
-                    <p className='font-light text-sm'>
-                        4:30 PM
-                    </p>
-                    <img src="./cloudy-night.png"
-                        alt=""
-                        className='w-12 my-1'
-                    />
-                    <p className='font-medium'>
-                        22°
-                    </p>
-                </div>
+
+                {items.map((item) => (
+                    <div className=' bg-white bg-opacity-30 rounded-lg flex flex-col items-center justify-center' >
+                        <p className='font-light text-sm'>
+                            {item.title}
+                        </p>
+                        <img src={iconUrlFromCode(item.icon)}
+                            alt="icon"
+                            className='w-12 my-1'
+                        />
+                        <p className='font-medium'>
+                            {`${item.temp.toFixed()}°`}
+                        </p>
+                    </div>
+                ))}
+
+
             </div>
-        </div>
+        </div >
     )
 }
 
