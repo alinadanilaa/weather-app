@@ -6,10 +6,17 @@ import Inputs from './components/Inputs'
 import TimeAndLocation from './components/TimeAndLocation'
 import TemperatureAndDetails from './components/TemperatureAndDetails';
 import Forecast from './components/Forecast.jsx';
+import getFormattedWeatherData from './services/weatherService';
+
 
 
 function App() {
 
+  const fetchWeather = async () => {
+    const data = await getFormattedWeatherData({ q: 'iasi' });
+    console.log(data);
+  };
+  fetchWeather();
 
   return (
     <div className="mx-auto max-w-screen-md mt-4 py-5 px-32
@@ -20,7 +27,8 @@ function App() {
 
       <TimeAndLocation />
       <TemperatureAndDetails />
-      <Forecast />
+      <Forecast title='hourly forecast' />
+      <Forecast title='Daily forecast' />
     </div>
   );
 }
