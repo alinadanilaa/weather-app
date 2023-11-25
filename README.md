@@ -1,4 +1,7 @@
-I have developed a dynamic weather website that provides real-time weather data by fetching information from an online API called Open Weather. This project is built using React, a popular JavaScript library for building user interfaces. The website offers a user-friendly interface allowing users to access current weather conditions in their desired or current location, as well as hourly and daily forecasts. UI inspired by Mayank Chaudhary on Figma.
+I have developed a dynamic weather website that provides real-time weather data by fetching information from an online API called Open Weather. 
+This project is built using React, a popular JavaScript library for building user interfaces. 
+The website offers a user-friendly interface allowing users to access current weather conditions in their desired or current location, as well as hourly and daily forecasts. 
+UI inspired by Mayank Chaudhary on Figma.
 
 Technology Stack:
 React: Utilized React to build a modular and efficient user interface.
