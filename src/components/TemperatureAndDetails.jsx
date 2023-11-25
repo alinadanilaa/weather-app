@@ -12,49 +12,37 @@ import {
 import { formatToLocalTime, iconUrlFromCode } from '../services/weatherService'
 
 function TemperatureAndDetails({ weather: {
-    details, icon, temp, temp_min, temp_max, sunrise,
-    sunset, speed, humidity, feels_like, timezone,
+    speed, humidity, feels_like
 } }) {
     return (
         <div>
-            <div className='flex items-center justify-center py-6 text-xl'>
-                <p>
-                    {details}
-                </p>
-            </div>
-            <div className='flex items-center justify-between py-3'>
-                <img
-                    src={iconUrlFromCode(icon)}
-                    alt="cloudy-night"
-                    className='w-20' />
-                <p className='text-5xl'>
-                    {`${temp.toFixed()}°`}
-                </p>
-                <div className='flex flex-col space-y-2'>
 
-                    <div className='flex font-light text-sm items-center justify-center'>
-                        <UilTemperature size={18} className='mr-1' />
-                        Feels like:
-                        <span className='font-medium ml-1'>
-                            {`${feels_like.toFixed()}°`}</span>
-                    </div>
+            {/* <div className='flex font-light text-sm items-center justify-center'> */}
 
-                    <div className='flex font-light text-sm items-center justify-center'>
-                        <UilTear size={18} className='mr-1' />
-                        Humidity:
-                        <span className='font-medium ml-1'> {`${humidity.toFixed()}%`}</span>
-                    </div>
+            <div className='flex flex-wrap items-center py-3'>
+                <div className='flex items-center justify-center'>
+                    <UilTemperature size={18} className='mr-1' />
+                    Feels like:
+                    <span className='font-medium px-2'>
+                        {`${feels_like.toFixed()}°`}</span>
 
-                    <div className='flex font-light text-sm items-center justify-center'>
-                        <UilWind size={18} className='mr-1' />
-                        Wind:
-                        <span className='font-medium ml-1'>
-                            {`${speed.toFixed()}km/h`}</span>
-                    </div>
-
+                    <p className='font-light px-2'>|</p>
+                </div>
+                <div className='flex items-center justify-center'>
+                    <UilTear size={18} className='mr-1' />
+                    Humidity:
+                    <span className='font-medium ml-1'>
+                        {`${humidity.toFixed()}%`}</span>
+                    <p className='font-light px-2'>|</p>
+                </div>
+                <div className='flex items-center justify-center'>
+                    <UilWind size={18} className='mr-1' />
+                    Wind:
+                    <span className='font-medium ml-1'>
+                        {`${speed.toFixed()}km/h`}</span>
                 </div>
             </div>
-
+            {/* 
             <div className='flex flex-row items-center justify-center space-x-2 text-sm py-3'>
                 < UilSun />
                 <p className='font-light'>
@@ -84,7 +72,7 @@ function TemperatureAndDetails({ weather: {
                 </p>
                 <p className='font-light'>|</p>
 
-            </div>
+            </div> */}
         </div>
     )
 }

@@ -1,13 +1,28 @@
 import React, { useState } from 'react';
 import { UilSearch, UilMapMarker } from '@iconscout/react-unicons';
 
-function Inputs({ setQuery, units, setUnits }) {
+// function Inputs({ setQuery, units, setUnits, weather: { name, country } }) {
+function Inputs({ setQuery, weather: { name, country } }) {
     const [city, setCity] = useState('');
+    const [isClassNameActive, setClassNameActive] = useState(false);
+
     const handleSearchClick = () => {
-        if (city !== '') setQuery({ q: city })
+        setClassNameActive((prevState) => !prevState);
+        if (city !== '') {
+            setQuery({ q: city })
+            setCity('');
+        }
+
     }
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearchClick();
+        }
+    };
 
     const handleLocationClick = () => {
+
+        setClassNameActive(false);
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 let lat = position.coords.latitude;
@@ -18,46 +33,34 @@ function Inputs({ setQuery, units, setUnits }) {
         }
     }
 
-    const handleunitsChange = (e) => {
-        const selectedUnit = e.currentTarget.name; //metric or imperial
-
-        if (units !== selectedUnit) setUnits(selectedUnit);
-    }
-
     return (
-        <div className='flex flex-row justify-center my-6'>
-            <div className='flex flex-row w-3/4 items-center justify-center space-x-4'>
+        <>
+            <div className='flex flex-row justify-between my-6'>
+                <div className={isClassNameActive ? 'hidden' : 'flex items-center my-3'}>
+                    <p className='text-xl font-medium'>{`${name}, ${country}`}</p>
+                </div>
+                <div className='flex items-center my-3'>
+                    <input
+                        value={city}
+                        onKeyDown={handleKeyDown}
+                        onChange={(e) => setCity(e.currentTarget.value)}
+                        type="text"
+                        placeholder='search city...'
+                        className={isClassNameActive ? 'bg-white bg-opacity-20 rounded-2xl text-xl font-light p-2  shadow-xl focus:outline-none capitalize placeholder:lowercase placeholder:text-gray-400 ' : 'hidden'}
+                    />
+                </div>
+                <div className='flex items-center'>
 
-                <input
-                    value={city}
-                    onChange={(e) => setCity(e.currentTarget.value)}
-                    type="text"
-                    placeholder='search city...'
-                    className='bg-white bg-opacity-20 rounded-2xl text-xl font-light p-2 w-full shadow-xl 
-                    focus:outline-none capitalize placeholder:lowercase placeholder:text-gray-400 '
-                />
-                <UilMapMarker size={25}
-                    className='cursor-pointer transition ease-out hover:scale-125'
-                    onClick={handleLocationClick} />
-                <UilSearch size={25}
-                    className='cursor-pointer transition ease-out hover:scale-125'
-                    onClick={handleSearchClick} />
-            </div>
+                    <UilSearch size={25}
+                        className='m-4 cursor-pointer transition ease-out hover:scale-125'
+                        onClick={handleSearchClick} />
+                    <UilMapMarker size={25}
+                        className='m-4 cursor-pointer transition ease-out hover:scale-125'
+                        onClick={handleLocationClick} />
+                </div>
 
-            <div className='flex flex-row w-1/4 items-center justify-center'>
-                <button name='metric'
-                    className='text-xl font-light transition ease-out hover:scale-125'
-                    onClick={handleunitsChange}>
-                    °C
-                </button>
-                <p className='text-xl mx-1'>|</p>
-                <button name='imperial'
-                    className='text-xl font-light transition ease-out hover:scale-125'
-                    onClick={handleunitsChange}>
-                    °F
-                </button>
             </div>
-        </div>
+        </>
     )
 }
 

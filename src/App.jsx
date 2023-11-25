@@ -7,7 +7,8 @@ import TimeAndLocation from './components/TimeAndLocation'
 import TemperatureAndDetails from './components/TemperatureAndDetails';
 import Forecast from './components/Forecast.jsx';
 import getFormattedWeatherData from './services/weatherService';
-
+import Temperature from './components/Temperature.jsx';
+import ProgressBar from './components/ProgressBar.jsx';
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
 
   const formatBackground = () => {
     if (!weather) return ' from-pink-200 to-purple-400';
-    const treshold = units == 'metric' ? 20 : 60;
+    const treshold = units == 'metric' ? 15 : 59;
     if (weather.temp >= treshold) return ' from-pink-200 to-purple-400';
 
     return ' from-blue-300 to-purple-400';
@@ -36,22 +37,32 @@ function App() {
 
 
   return (
-    <div className={`mx-auto max-w-screen-md mt-4 py-5 px-32
+    <div className={`mx-auto max-w-screen-md mt-4 py-5 px-10
     bg-gradient-to-tr    h-fit shadow-xl shadow-gray-400
        ${formatBackground()}`}>
-      <TopButtons setQuery={setQuery} />
-      <Inputs setQuery={setQuery} units={units} setUnits={setUnits} />
+      <div >
 
 
-      {weather && (
-        <div>
-          <TimeAndLocation weather={weather} />
-          <TemperatureAndDetails weather={weather} />
+        {weather && (
+          <>
+            <div>
+              <Inputs setQuery={setQuery} weather={weather} />
+              <Temperature units={units} setUnits={setUnits} weather={weather} />
+              <TimeAndLocation weather={weather} />
+              <TemperatureAndDetails weather={weather} />
 
-          <Forecast title="hourly forecast" items={weather.hourly} />
-          <Forecast title="daily forecast" items={weather.daily} />
-        </div>
-      )}
+              <Forecast title="hourly forecast" items={weather.hourly} />
+              <Forecast title="daily forecast" items={weather.daily} />
+            </div>
+            <div>
+              {/*<ProgressBar weather={weather} />
+               <TopButtons setQuery={setQuery} /> */}
+            </div>
+          </>)}
+
+      </div>
+
+
 
     </div>
   );
