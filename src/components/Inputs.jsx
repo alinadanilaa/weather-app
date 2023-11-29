@@ -46,7 +46,7 @@ function Inputs({ setQuery, weather: { name, country } }) {
                         onChange={(e) => setCity(e.currentTarget.value)}
                         type="text"
                         placeholder='search city...'
-                        className={isClassNameActive ? 'bg-white bg-opacity-20 rounded-2xl text-xl font-light p-2  shadow-xl focus:outline-none capitalize placeholder:lowercase placeholder:text-gray-400 ' : 'hidden'}
+                        className={isClassNameActive ? 'bg-white bg-opacity-20 rounded-2xl text-xl font-light p-2 shadow-xl focus:outline-none capitalize placeholder:lowercase placeholder:text-gray-400 sm:w-11/12' : 'hidden'}
                     />
                 </div>
                 <div className='flex items-center'>

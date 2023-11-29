@@ -1,5 +1,5 @@
 import React from 'react'
-import { iconUrlFromCode } from '../services/weatherService';
+// import { iconUrlFromCode } from '../services/weatherService';
 import { useState } from 'react';
 import { UilAngleLeftB, UilAngleRightB } from '@iconscout/react-unicons'
 
@@ -32,7 +32,9 @@ function Forecast({ title, items }) {
                 <div className='flex flex-row items-center justify-between '>
                     {items.slice(currentIndex, currentIndex + 4).map((item, index) => (
                         <div key={index}
-                            className='p-3 mx-6 bg-white bg-opacity-30 rounded-lg flex flex-col items-center justify-between'>
+                            className='p-3 mx-6 bg-white bg-opacity-30 rounded-lg flex 
+                            flex-col items-center justify-between
+                            sm:mx-3'>
                             <p className='font-medium'>
                                 {`${item.temp.toFixed()}°`}
                             </p>

@@ -5,7 +5,14 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'sm': { max: '576px' },
+        // => @media (max-width: 576px) { ... }
+      },
+    },
+
+
   },
   plugins: [
     require('tailwindcss-opacity'),
