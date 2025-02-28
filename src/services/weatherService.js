@@ -1,19 +1,21 @@
 import { DateTime } from "luxon";
 
-const API_KEY = '1fa9ff4126d95b8db54f3897a208e91c'; //appid
+const API_KEY = '8583588fef72b811558a7d7c4a41324a'; //appid
 const BASE_URL = 'https://api.openweathermap.org/data/2.5';
 
-//1fa9ff4126d95b8db54f3897a208e91c 
-//8583588fef72b811558a7d7c4a41324a -- mine 
+const getWeatherData = async (infoType, searchParams) => {
+    try {
+        const url = new URL(BASE_URL + "/" + infoType);
+        url.search = new URLSearchParams({ ...searchParams, appid: API_KEY });
 
-//https://api.openweathermap.org/data/2.5/onecall?lat=48.8534&lon=2.3488&exclude=current,minutely,hourly,alerts&appid=1fa9ff4126d95b8db54f3897a208e91c&units=metric
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`API request failed: ${res.statusText}`);
 
-const getWeatherData = (infoType, searchParams) => {
-    //  Constructs the URL for the OpenWeatherMap API, including the API key 
-    //  and additional parameters, and fetches weather data using the 'fetch' function.
-    const url = new URL(BASE_URL + "/" + infoType);
-    url.search = new URLSearchParams({ ...searchParams, appid: API_KEY });
-    return fetch(url).then((res) => res.json());
+        return await res.json();
+    } catch (error) {
+        console.error("Fetch error:", error);
+        return null;
+    }
 };
 
 const formatCurrentWeather = (data) => {
@@ -50,52 +52,48 @@ const formatCurrentWeather = (data) => {
 };
 
 const formatForecastWeather = (data) => {
-    // Extracts relevant information from the forecast weather data, 
-    // focusing on daily and hourly forecasts, and returns a formatted object.
-    let { timezone, daily, hourly } = data;
-    daily = daily.slice(1, 8).map((d) => {
-        return {
-            title: formatToLocalTime(d.dt, timezone, "ccc"),
-            temp: d.temp.day,
-            icon: d.weather[0].icon,
-        };
-    });
+    if (!data || !data.list) {
+        console.error("No forecast data received");
+        return { timezone: null, daily: [], hourly: [] };
+    }
 
-    hourly = hourly.slice(1, 20).map((d) => {
-        return {
-            title: formatToLocalTime(d.dt, timezone, "hh:mm a"),
-            temp: d.temp,
-            icon: d.weather[0].icon,
-        };
-    });
+    const { city, list } = data;
+    const timezone = city.timezone || "UTC";
+
+    // Group data into daily forecasts
+    const daily = list.filter((item) => item.dt_txt.includes("12:00:00")).map((d) => ({
+        title: formatToLocalTime(d.dt, timezone, "ccc"),
+        temp: d.main.temp,
+        icon: d.weather[0].icon,
+    }));
+
+    // Extract hourly forecasts for next 24 hours
+    const hourly = list.slice(0, 8).map((d) => ({
+        title: formatToLocalTime(d.dt, timezone, "hh:mm a"),
+        temp: d.main.temp,
+        icon: d.weather[0].icon,
+    }));
 
     return { timezone, daily, hourly };
 };
 
+
 const getFormattedWeatherData = async (searchParams) => {
-    //contains asynchronous operations and may use await to pause execution until a promise is resolved
-
-    // Combines current weather and forecast data by calling getWeatherData  for both "weather" and
-    // "onecall" types, and then formats the results using formatCurrentWeather and formatForecastWeather
-
-    const formattedCurrentWeather = await getWeatherData(
-        "weather",
-        searchParams
-    ).then(formatCurrentWeather);
+    // Fetch current weather
+    const formattedCurrentWeather = await getWeatherData("weather", searchParams).then(formatCurrentWeather);
 
     const { lat, lon } = formattedCurrentWeather;
 
-    //Similar to the current weather, this code fetches forecast 
-    // weather data from the OpenWeatherMap API using the "onecall" endpoint.
-    const formattedForecastWeather = await getWeatherData("onecall", {
+    // Fetch 5-day forecast instead of One Call API
+    const formattedForecastWeather = await getWeatherData("forecast", {
         lat,
         lon,
-        exclude: "current,minutely,alerts",
         units: searchParams.units,
     }).then(formatForecastWeather);
 
     return { ...formattedCurrentWeather, ...formattedForecastWeather };
 };
+
 
 const formatToLocalTime = (
     // Converts a timestamp in seconds to a local time string, 
